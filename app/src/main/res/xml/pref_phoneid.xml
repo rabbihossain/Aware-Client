@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:id="@+id/Preference_in_Settings_phoneID"
+        android:selectable="false"
+        android:enabled="true"
+        android:key="@string/pref_PhoneId_preferenceValue_key"
+        android:title="@string/pref_title_deviceId"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:summary="" />
+
+</PreferenceScreen>

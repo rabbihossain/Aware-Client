@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/home/r4bb1h/.android/build-cache/0d778c3937999ba9e9334a90a745033aa0d16104/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/pre-dexed/debug/classes_5f981952e5394f15dc6ddef17cbd2c4ebb0574b5.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/r4bb1h/KAUDroid/App/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="ad3efb003aec4a5901f93c8931cefdd12aa30fe7">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_3cb8370d7fa45a7948189c37d6d5412aca7297c1/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/r4bb1h/.android/build-cache/af696e57d63b8dd91106d08ece5a36d8b8cb0730/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/pre-dexed/debug/classes_f7cf1fb4d5f78ab25b30eaad39f9ac2835de5c87.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/r4bb1h/.android/build-cache/9f33aaee71c797fe5a6ad7460013588871f466f6/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="fd803f43eddf560e5025b129cea5abcad1096022">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/pre-dexed/debug/classes_0fe3a9f288722c136ec83bad5d5674742e50cbf6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/r4bb1h/.android/build-cache/32afacfbe192cbfa2b2cef5e47e7b95ac9562381/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/pre-dexed/debug/classes_af9286b471ac7a8c447412954ef3a903879696ca.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/r4bb1h/.android/build-cache/54221f902b839d3ecfbd4b0655ba9e707bdcd288/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="9bdfc3e83c6bc1f8bc5807cdaf7e94ac884a2a0d">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/pre-dexed/debug/classes_b22b46f58ff8ed80e89685c4668a7ae704f4165b.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/r4bb1h/KAUDroid/App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_01fb94df2c98c437bb191f89430d943c2f89cda3/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/r4bb1h/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/pre-dexed/debug/support-annotations-23.4.0_8481cc5ba762f2ae7420ef3a564985144147f25e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/r4bb1h/.android/build-cache/398f6f93c8f5a3f6292664c502e242c98af2c6fc/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/pre-dexed/debug/classes_b6d13ee9dc6c8ef634e289e8bac2b455d0bec1c5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/r4bb1h/.android/build-cache/32afacfbe192cbfa2b2cef5e47e7b95ac9562381/output/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/home/r4bb1h/KAUDroid/App/app/build/intermediates/pre-dexed/debug/internal_impl-23.4.0_5ac4effb280667e439215eeca5d0ab86bdf1604b.jar" />
+    </item>
+
+</items>

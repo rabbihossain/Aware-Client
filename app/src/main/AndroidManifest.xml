@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.a_ware.a_ware">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-feature android:name="android.hardware.location.network" />
+    <uses-feature android:name="android.hardware.location.gps" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".permActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TCAppList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TCPermList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TCAppDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".loggerService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".TCServiceReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".IncomingSms">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".TCPermDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MockLocation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RPP_Main"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RPPSetPass"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RPPGetPass"
+            android:screenOrientation="portrait" />
+        <activity android:name=".logger" />
+
+
+        <service
+            android:name=".deleteSyncedDataService"
+            android:exported="false" />
+        <service
+            android:name=".SendDataService"
+            android:exported="false" />
+        <service
+            android:name=".LocationService"
+            android:exported="false" />
+    </application>
+</manifest>

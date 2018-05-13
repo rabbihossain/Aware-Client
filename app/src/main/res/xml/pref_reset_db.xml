@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <ListPreference
+            android:id="@+id/delete_db_frequency_id"
+            android:defaultValue="@string/pref_delete_db_frequency_defaultValue"
+            android:entries="@array/pref_delete_db_frequency_titles"
+            android:entryValues="@array/pref_delete_db_frequency_values"
+            android:key="@string/pref_delete_db_frequency_key"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_reset_db_options" />
+    </PreferenceScreen>
