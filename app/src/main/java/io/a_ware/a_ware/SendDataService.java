@@ -129,7 +129,7 @@ public class SendDataService extends IntentService {
                                     params.put("Package", object.packagen);
                                     params.put("Permission", object.permission);
                                     params.put("Timestamp", String.valueOf(object.timestamp));
-                                    params.put("GPS", !object.gps.isEmpty()? object.gps : "N/A");
+                                    params.put("GPS", object.gps == ""? "N/A": object.gps);
 
                                     return params;
                                 }

@@ -105,7 +105,7 @@ public class loggerService extends Service {
                             Log.e(TAG, "TimeString: " + timeString + " in milisec:" + getMilliSecFromString(timeString.substring(0, timeString.length() - 1))
                                 + " current: " + System.currentTimeMillis() + " datestring: " + DateString);*/
                             int syncBit = 0;
-                            String GPS = "";
+                            String GPS = "N/A";
                             if (getLocation() != null) {
                                 GPS = getLocation().getLatitude() + " | " + getLocation().getLongitude();
                                 Log.d(TAG, "The permission contained in GPS is: " + GPS);
