@@ -275,22 +275,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logClicked(View view) throws IOException, JSONException {
-        Toast.makeText(this, "Wait a bit...", Toast.LENGTH_LONG).show();
-        TinyDB tinydb = new TinyDB(getApplicationContext());
-
-        try {
-            String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-            File myFile = new File(Environment.getExternalStorageDirectory().getPath()+"/AwareLog-" + date + ".json");
-            myFile.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(myFile);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.write(tinydb.getString("TotalLog"));
-            myOutWriter.close();
-            fOut.close();
-            Toast.makeText(this, "Log file generated. Filename - AwareLog-" + date + ".json", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Intent logOpenIntent = new Intent(this, logDataActivity.class);
+        Log.d(TAG, "starting log activity");
+        startActivity(logOpenIntent);
     }
 
 

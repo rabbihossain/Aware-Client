@@ -1,15 +1,16 @@
 package io.a_ware.a_ware;
 
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -60,7 +61,6 @@ public class SendDataService extends IntentService {
 //TODO make sure the toas for starting baground service only show when button is pushed to start it, not when the alarm clock stats it
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Sending data in the background", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Service started by wakeup lock on sync intervall");
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -78,9 +78,8 @@ public class SendDataService extends IntentService {
         Log.d(TAG, "In onHandleIntent");
         TinyDB tinydb = new TinyDB(getApplicationContext());
 
-        List<Applog> totalLog = Select.from(Applog.class).where(Condition.prop("synced").eq(0)).list();
+        List<Applog> totalLog = Select.from(Applog.class).where(Condition.prop("synced").eq(0)).limit("100").list();
 
-        Toast.makeText(this, "found items count " + totalLog.size(), Toast.LENGTH_SHORT).show();
 
         boolean run = true;
         if(isInternetAvailable()) {
@@ -94,20 +93,13 @@ public class SendDataService extends IntentService {
 
                         final Applog object = totalLog.get(i);
 
-                        final Object reqObj = new JSONObject();
-                        ((JSONObject) reqObj).put("PhoneID", object.phoneid);
-                        ((JSONObject) reqObj).put("Package", object.packagen);
-                        ((JSONObject) reqObj).put("Permission", object.permission);
-                        ((JSONObject) reqObj).put("Timestamp", object.timestamp);
-                        ((JSONObject) reqObj).put("GPS", object.gps);
-
-                        final String input = reqObj.toString();
 
                             RequestQueue queue = Volley.newRequestQueue(this);
                             String url = "http://" + serverName + ":" + port + "/add-data" ;
                             StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                                     new Response.Listener<String>()
                                     {
+                                        @TargetApi(Build.VERSION_CODES.KITKAT)
                                         @Override
                                         public void onResponse(String response) {
                                             // response
@@ -132,7 +124,13 @@ public class SendDataService extends IntentService {
                                 protected Map<String, String> getParams()
                                 {
                                     Map<String, String> params = new HashMap<String, String>();
-                                    params.put("data", input);
+
+                                    params.put("PhoneID", object.phoneid);
+                                    params.put("Package", object.packagen);
+                                    params.put("Permission", object.permission);
+                                    params.put("Timestamp", String.valueOf(object.timestamp));
+                                    params.put("GPS", !object.gps.isEmpty()? object.gps : "N/A");
+
                                     return params;
                                 }
                             };

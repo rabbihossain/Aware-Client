@@ -90,9 +90,6 @@ public class loggerService extends Service {
 
                 if (suAvailable) {
                     Log.d("Su", "Found");
-                    Toast.makeText(getApplicationContext(), "Root Found", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Root Not Found", Toast.LENGTH_SHORT).show();
                 }
 
                 for (String appName : appList) {
@@ -127,7 +124,6 @@ public class loggerService extends Service {
                             if (foundItems.size() <= 0) {
                                 Applog newItem = new Applog(PhoneId, appName, permName, DateString, GPS, syncBit);
                                 newItem.save();
-                                Toast.makeText(getApplicationContext(), "Added Item in DB " + newItem.getId(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
