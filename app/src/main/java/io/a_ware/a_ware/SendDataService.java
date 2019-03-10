@@ -17,6 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +33,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.security.MessageDigest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -74,25 +77,32 @@ public class SendDataService extends IntentService {
     protected void onHandleIntent(Intent workIntent){
         Log.d(TAG, "In onHandleIntent");
         TinyDB tinydb = new TinyDB(getApplicationContext());
-        String totalLog = tinydb.getString("TotalLog");
-        JSONArray loggedArray = null;
+
+        List<Applog> totalLog = Select.from(Applog.class).where(Condition.prop("synced").eq(0)).list();
+
+        Toast.makeText(this, "found items count " + totalLog.size(), Toast.LENGTH_SHORT).show();
+
         boolean run = true;
         if(isInternetAvailable()) {
-            try {
-                loggedArray = new JSONArray(totalLog);
-            } catch (JSONException e) {
-                Log.e(TAG, "Error jsonException " + e.toString());
-            }
-            if (!isAllSynced(loggedArray)) {
+
+            if (totalLog.size() > 0) {
                 Log.d(TAG, "The data is not synced yet, do it now");
                 try {
                     Log.d(TAG, "Connecting to: " + serverName + " on port " + port);
 
-                    printAllData(loggedArray);
-                    for (int i = 0; i < loggedArray.length(); i++) {
-                        final JSONObject object = loggedArray.getJSONObject(i);
-                        final String input = object.toString();
-                        if (!isEntrySynced(object)) {
+                    for (int i = 0; i < totalLog.size(); i++) {
+
+                        final Applog object = totalLog.get(i);
+
+                        final Object reqObj = new JSONObject();
+                        ((JSONObject) reqObj).put("PhoneID", object.phoneid);
+                        ((JSONObject) reqObj).put("Package", object.packagen);
+                        ((JSONObject) reqObj).put("Permission", object.permission);
+                        ((JSONObject) reqObj).put("Timestamp", object.timestamp);
+                        ((JSONObject) reqObj).put("GPS", object.gps);
+
+                        final String input = reqObj.toString();
+
                             RequestQueue queue = Volley.newRequestQueue(this);
                             String url = "http://" + serverName + ":" + port + "/add-data" ;
                             StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -102,7 +112,9 @@ public class SendDataService extends IntentService {
                                         public void onResponse(String response) {
                                             // response
                                             if (Objects.equals(response, "success")){
-                                                setSynced(object);
+                                                object.synced = 1;
+                                                object.save();
+
                                                 Log.d("VolleyResponse", "Object stored successfully on server.");
                                             }
                                         }
@@ -125,7 +137,7 @@ public class SendDataService extends IntentService {
                                 }
                             };
                             queue.add(postRequest);
-                        }
+
                     }
                     Log.d(TAG, "The data was succefully sent to the server");
                 } catch (Exception e) {
@@ -135,8 +147,6 @@ public class SendDataService extends IntentService {
             } else {
                 Log.d(TAG, "The data is allready synced");
             }
-            tinydb.putString("TotalLog", loggedArray.toString()); //save the updated loggedArray to db
-            Log.e(TAG, "Entired db " + tinydb.getString("TotalLog"));
         }
     }
 

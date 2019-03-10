@@ -22,6 +22,9 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.orm.query.Condition;
+import com.orm.query.Select;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,60 +84,54 @@ public class loggerService extends Service {
             public void run() {
                 TinyDB tinydb = new TinyDB(getApplicationContext());
 
-                final String totalLog = tinydb.getString("TotalLog");
-                Log.d(TAG, "totalLog" +  totalLog);
-                JSONArray loggedArray = null;
-                try {
-                    loggedArray = new JSONArray(totalLog);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
                 final ArrayList<String> appList = tinydb.getListString("AwareAppList");
 
                 suAvailable = Shell.SU.available();
 
-                if(suAvailable){
+                if (suAvailable) {
                     Log.d("Su", "Found");
+                    Toast.makeText(getApplicationContext(), "Root Found", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Root Not Found", Toast.LENGTH_SHORT).show();
                 }
-                for (String appName : appList){
-                    Log.d(TAG, "Now Querying APP " + appName);
-                    suResult = Shell.SU.run("appops get " +  appName);
 
-                    for(String line : suResult) {
-                        if (line.contains("ago") && !(appName.contentEquals("io.a_ware.a_ware") || appName.contentEquals("eu.chainfire.supersu") || appName.contentEquals("me.phh.superuser"))){
+                for (String appName : appList) {
+                    Log.d(TAG, "Now Querying APP " + appName);
+                    suResult = Shell.SU.run("appops get " + appName);
+
+                    for (String line : suResult) {
+                        if (line.contains("ago") && !(appName.contentEquals("io.a_ware.a_ware") || appName.contentEquals("eu.chainfire.supersu") || appName.contentEquals("me.phh.superuser"))) {
                             String permName = line.substring(0, line.indexOf(':'));
                             String timeString = line.substring(line.indexOf("+"), line.indexOf("ago"));
                             Date DateString = new Date(System.currentTimeMillis() - getMilliSecFromString(timeString.substring(0, timeString.length() - 1)));
                             /*Log.e(TAG, "Perm " + permName + " appname: " + appName);
                             Log.e(TAG, "TimeString: " + timeString + " in milisec:" + getMilliSecFromString(timeString.substring(0, timeString.length() - 1))
                                 + " current: " + System.currentTimeMillis() + " datestring: " + DateString);*/
-                            JSONObject loggedObj = new JSONObject();
                             int syncBit = 0;
                             String GPS = "";
-                            if(getLocation() != null){
+                            if (getLocation() != null) {
                                 GPS = getLocation().getLatitude() + " | " + getLocation().getLongitude();
                                 Log.d(TAG, "The permission contained in GPS is: " + GPS);
                             }
-                            try {
-                                loggedObj.put(getResources().getString(R.string.PhoneId), PhoneId);
-                                loggedObj.put(getResources().getString(R.string.Package), appName);
-                                loggedObj.put(getResources().getString(R.string.Permission), permName);
-                                loggedObj.put(getResources().getString(R.string.Timestamp), DateString);
-                                loggedObj.put(getResources().getString(R.string.GPS), GPS);
-                                loggedObj.put(getResources().getString(R.string.Synced), syncBit);
 
-                                if (!(loggedArray.toString().contains(loggedObj.toString())) && DateString.after(LastRunDate)) {
-                                    loggedArray.put(loggedObj);
-                                    Log.d(TAG, "Added: " +loggedObj.toString());
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            List<Applog> foundItems = Select.from(Applog.class)
+                                    .where(
+                                            Condition.prop("phoneid").eq(PhoneId),
+                                            Condition.prop("packagen").eq(appName),
+                                            Condition.prop("permission").eq(permName),
+                                            Condition.prop("timestamp").eq(DateString),
+                                            Condition.prop("gps").eq(GPS),
+                                            Condition.prop("synced").eq(syncBit)
+                                    )
+                                    .list();
+                            if (foundItems.size() <= 0) {
+                                Applog newItem = new Applog(PhoneId, appName, permName, DateString, GPS, syncBit);
+                                newItem.save();
+                                Toast.makeText(getApplicationContext(), "Added Item in DB " + newItem.getId(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
                 }
-                tinydb.putString("TotalLog", loggedArray.toString());
                 LastRunDate = new Date(System.currentTimeMillis());
                 Log.d(TAG, "LastRunDate: " + LastRunDate.toString());
             }
@@ -148,8 +145,18 @@ public class loggerService extends Service {
     }
 
     //TODO check permission OK and alternativ solution
-    private void getPhoneId(){
-        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+    private void getPhoneId() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         PhoneId = telephonyManager.getDeviceId();
         if (null == PhoneId || 0 == PhoneId.length()) {
             PhoneId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
