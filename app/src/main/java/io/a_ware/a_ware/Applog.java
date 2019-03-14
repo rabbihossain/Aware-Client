@@ -11,13 +11,13 @@ public class Applog extends SugarRecord <Applog> {
     String permission;
     Date timestamp;
     String gps;
-    Integer synced;
+    String synced;
 
 
     public Applog() {
     }
 
-    public Applog(String phoneid, String packagen, String permission, Date timestamp, String gps, Integer synced) {
+    public Applog(String phoneid, String packagen, String permission, Date timestamp, String gps, String synced) {
         this.phoneid = phoneid;
         this.packagen = packagen;
         this.permission = permission;

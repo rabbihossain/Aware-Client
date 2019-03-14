@@ -104,10 +104,10 @@ public class loggerService extends Service {
                             /*Log.e(TAG, "Perm " + permName + " appname: " + appName);
                             Log.e(TAG, "TimeString: " + timeString + " in milisec:" + getMilliSecFromString(timeString.substring(0, timeString.length() - 1))
                                 + " current: " + System.currentTimeMillis() + " datestring: " + DateString);*/
-                            int syncBit = 0;
+                            String syncBit = "0";
                             String GPS = "N/A";
                             if (getLocation() != null) {
-                                GPS = getLocation().getLatitude() + " | " + getLocation().getLongitude();
+                                GPS = getLocation().getLatitude() + " - " + getLocation().getLongitude();
                                 Log.d(TAG, "The permission contained in GPS is: " + GPS);
                             }
 
@@ -116,11 +116,10 @@ public class loggerService extends Service {
                                             Condition.prop("phoneid").eq(PhoneId),
                                             Condition.prop("packagen").eq(appName),
                                             Condition.prop("permission").eq(permName),
-                                            Condition.prop("timestamp").eq(DateString),
-                                            Condition.prop("gps").eq(GPS),
-                                            Condition.prop("synced").eq(syncBit)
+                                            Condition.prop("timestamp").eq(DateString)
                                     )
                                     .list();
+                            Log.d("Found Size of WHERE", String.valueOf(foundItems.size()));
                             if (foundItems.size() <= 0) {
                                 Applog newItem = new Applog(PhoneId, appName, permName, DateString, GPS, syncBit);
                                 newItem.save();

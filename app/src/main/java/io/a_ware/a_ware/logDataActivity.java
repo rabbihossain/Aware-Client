@@ -23,8 +23,8 @@ public class logDataActivity extends AppCompatActivity {
         TextView nonSyncedItem = (TextView) findViewById(R.id.totalNonSyncedItem);
 
         long totalCount = Applog.count(Applog.class, null, null);
-        long syncedCount = Applog.count(Applog.class, "synced = ?",  new String[]{String.valueOf(1)});
-        long nonSyncedCount = Applog.count(Applog.class, "synced = ?",  new String[]{String.valueOf(0)});
+        long syncedCount = Applog.count(Applog.class, "synced = ?",  new String[]{"1"});
+        long nonSyncedCount = Applog.count(Applog.class, "synced = ?",  new String[]{"0"});
 
         totalItems.setText("Total DB Items - " + totalCount);
         syncedItem.setText("Total Synced Items - " + syncedCount);

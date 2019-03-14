@@ -11,6 +11,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -62,6 +63,7 @@ public class SendDataService extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "Service started by wakeup lock on sync intervall");
+        Toast.makeText(this, "Sending data in background", Toast.LENGTH_SHORT).show();
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         port = Integer.parseInt(sharedPref.getString(this.getString(R.string.pref_port_number_key), this.getString(R.string.pref_port_number_defaultValue)));
@@ -78,7 +80,7 @@ public class SendDataService extends IntentService {
         Log.d(TAG, "In onHandleIntent");
         TinyDB tinydb = new TinyDB(getApplicationContext());
 
-        List<Applog> totalLog = Select.from(Applog.class).where(Condition.prop("synced").eq(0)).limit("100").list();
+        List<Applog> totalLog = Select.from(Applog.class).where(Condition.prop("synced").eq(0)).limit("1000").list();
 
 
         boolean run = true;
@@ -104,7 +106,7 @@ public class SendDataService extends IntentService {
                                         public void onResponse(String response) {
                                             // response
                                             if (Objects.equals(response, "success")){
-                                                object.synced = 1;
+                                                object.synced = "1";
                                                 object.save();
 
                                                 Log.d("VolleyResponse", "Object stored successfully on server.");
@@ -123,7 +125,7 @@ public class SendDataService extends IntentService {
                                 @Override
                                 protected Map<String, String> getParams()
                                 {
-                                    Map<String, String> params = new HashMap<String, String>();
+                                    Map<String, String> params = new HashMap<>();
 
                                     params.put("PhoneID", object.phoneid);
                                     params.put("Package", object.packagen);
