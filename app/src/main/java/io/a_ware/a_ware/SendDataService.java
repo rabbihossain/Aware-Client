@@ -90,15 +90,14 @@ public class SendDataService extends IntentService {
                 Log.d(TAG, "The data is not synced yet, do it now");
                 try {
                     Log.d(TAG, "Connecting to: " + serverName + " on port " + port);
+                    RequestQueue queue = Volley.newRequestQueue(this);
 
                     for (int i = 0; i < totalLog.size(); i++) {
 
                         final Applog object = totalLog.get(i);
 
-
-                            RequestQueue queue = Volley.newRequestQueue(this);
                             String url = "http://" + serverName + ":" + port + "/add-data" ;
-                            StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                            final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                                     new Response.Listener<String>()
                                     {
                                         @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -136,6 +135,7 @@ public class SendDataService extends IntentService {
                                     return params;
                                 }
                             };
+                            postRequest.setShouldCache(false);
                             queue.add(postRequest);
 
                     }
