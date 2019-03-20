@@ -13,6 +13,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -34,6 +35,7 @@ import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketException;
 import java.security.MessageDigest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +120,15 @@ public class SendDataService extends IntentService {
                                         public void onErrorResponse(VolleyError error) {
                                             // error
                                             Log.d("Error.Response", String.valueOf(error));
+                                            Map<String, String> sentParams = new HashMap<>();
+
+                                            sentParams.put("PhoneID", object.phoneid);
+                                            sentParams.put("Package", object.packagen);
+                                            sentParams.put("Permission", object.permission);
+                                            sentParams.put("Timestamp", object.timestamp.toLocaleString());
+                                            sentParams.put("GPS", object.gps == ""? "N/A": object.gps);
+
+                                            Log.d("Sent Dtata", sentParams.toString());
                                         }
                                     }
                             ) {
@@ -129,13 +140,17 @@ public class SendDataService extends IntentService {
                                     params.put("PhoneID", object.phoneid);
                                     params.put("Package", object.packagen);
                                     params.put("Permission", object.permission);
-                                    params.put("Timestamp", String.valueOf(object.timestamp));
+                                    params.put("Timestamp", object.timestamp.toLocaleString());
                                     params.put("GPS", object.gps == ""? "N/A": object.gps);
 
                                     return params;
                                 }
                             };
                             postRequest.setShouldCache(false);
+                            postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                                20000,
+                                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                             queue.add(postRequest);
 
                     }
