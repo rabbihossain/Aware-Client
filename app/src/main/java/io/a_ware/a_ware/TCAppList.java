@@ -60,21 +60,7 @@ public class TCAppList extends AppCompatActivity {
                 itemdetail.add(packageInfo.packageName);
             }
         }
-        /**
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                String Selecteditem = itemdetail.get(+position);
-
-                Intent intent = new Intent(TCAppList.this, TCAppDetail.class);
-                intent.putExtra("pkgname", Selecteditem);
-                startActivity(intent);
-
-            }
-        });
-        */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -87,18 +73,5 @@ public class TCAppList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        /**
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView parentView, View childView, int position, long id) {
-                String Selecteditem = itemdetail.get(+position);
-
-                Intent intent = new Intent(TCAppList.this, logger.class);
-                intent.putExtra("pkgname", Selecteditem);
-                startActivity(intent);
-                return true;
-            }
-        });
-         */
     }
 }

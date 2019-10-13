@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: eu.chainfire:libsuperuser:1.0.0.201811281328@aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../.android/build-cache/a72c45f32bbbacd4224d31054a4c4d6047d38b3b/output/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../.android/build-cache/a72c45f32bbbacd4224d31054a4c4d6047d38b3b/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

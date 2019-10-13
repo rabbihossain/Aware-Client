@@ -1,22 +1,17 @@
 package io.a_ware.a_ware;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +20,6 @@ import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
 
-import static android.R.attr.value;
 
 public class logger extends AppCompatActivity {
 
@@ -61,7 +55,7 @@ public class logger extends AppCompatActivity {
             // don't do the dialog thing.
 
             dialog = new ProgressDialog(context);
-            dialog.setTitle("Some title");
+            dialog.setTitle("Please Wait");
             dialog.setMessage("Doing something interesting ...");
             dialog.setIndeterminate(true);
             dialog.setCancelable(false);
@@ -109,9 +103,55 @@ public class logger extends AppCompatActivity {
                 }
             }
             ListView listView = (ListView) findViewById(R.id.loggerList);
-
             CustomArrayListAdapterForPerm adapter=new CustomArrayListAdapterForPerm(activity, itemname, itemdetail);
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // TODO Auto-generated method stub
+                    final String Selecteditem = itemname.get(+position);
+//
+
+                    // setup the alert builder
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Enable / Disable Permissions");
+
+                    // add a radio button list
+                    final String[] choices = {"allow", "maybe", "deny"};
+                    final int checkedItem = 1;
+                    final int[] checkedItemFinal = {1};
+                    builder.setSingleChoiceItems(choices, checkedItem, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // user checked an item
+                            checkedItemFinal[0] = which;
+                        }
+                    });
+                    // add OK and Cancel buttons
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("logger.class", String.valueOf(checkedItemFinal[0]));
+                            final String command = "appops set "+ appPackageName + " " + Selecteditem + " ";
+                            if(checkedItemFinal[0] == 0 || checkedItemFinal[0] == 2) {
+                                Shell.SU.run(new String[] {
+                                        command + choices[checkedItemFinal[0]]
+                                });
+                            } else {
+                                Log.d("logger.class", String.valueOf(checkedItemFinal[0]));
+                            }
+
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", null);
+
+                    // create and show the alert dialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                }
+            });
         }
     }
 
