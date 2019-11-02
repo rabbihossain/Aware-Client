@@ -10,10 +10,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,13 +22,9 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -97,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO add delay between starts so toas wont overlapp and to reduce computing power needed
         requestPermissions();
-        startSendDataService();
-        startDeleteSyncedDataService();
         startLocationService();
         startLoggerService();
     }
@@ -119,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "All permission granted start services");
             startLocationService();
             startLoggerService();
-            startSendDataService();
             startDeleteSyncedDataService();
         }
         else{

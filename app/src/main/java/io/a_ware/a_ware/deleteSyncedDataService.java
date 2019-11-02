@@ -3,10 +3,10 @@ package io.a_ware.a_ware;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.orm.query.Condition;
 import com.orm.query.Select;

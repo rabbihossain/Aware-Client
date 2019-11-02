@@ -1,7 +1,8 @@
 package io.a_ware.a_ware;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class RPPGetPass extends AppCompatActivity {
 

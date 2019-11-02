@@ -36,4 +36,23 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/sendDataServiceButton"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="117dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="startSendDataService"
+        android:text="Send Data to Server" />
+
+    <Button
+        android:id="@+id/deleteDataServiceButton"
+        android:layout_below="@id/sendDataServiceButton"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="11dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="startDeleteSyncedDataService"
+        android:text="Delete Synced Data" />
+
 </RelativeLayout>

@@ -6,17 +6,23 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -139,7 +145,22 @@ public class logger extends AppCompatActivity {
                                         command + choices[checkedItemFinal[0]]
                                 });
                             } else {
-                                Log.d("logger.class", String.valueOf(checkedItemFinal[0]));
+                                Shell.SU.run(new String[] {
+                                        command + "allow"
+                                });
+                                String commandString = command + "deny";
+                                Data d = new Data.Builder()
+                                        .putString("command", commandString)
+                                        .build();
+
+
+                                OneTimeWorkRequest runCommand =
+                                        new OneTimeWorkRequest.Builder(PermissionMaybe.class)
+                                                .setInputData(d)
+                                                .setInitialDelay(1440, TimeUnit.MINUTES)
+                                                .build();
+
+                                WorkManager.getInstance(context).enqueue(runCommand);
                             }
 
                         }

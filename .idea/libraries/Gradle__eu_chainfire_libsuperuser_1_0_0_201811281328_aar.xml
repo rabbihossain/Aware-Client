@@ -1,10 +1,14 @@
 <component name="libraryTable">
   <library name="Gradle: eu.chainfire:libsuperuser:1.0.0.201811281328@aar">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../.android/build-cache/a72c45f32bbbacd4224d31054a4c4d6047d38b3b/output/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/../.android/build-cache/a72c45f32bbbacd4224d31054a4c4d6047d38b3b/output/res" />
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/04b86217d93308dbfb3ffaf6e6fb74d8/libsuperuser-1.0.0.201811281328/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/04b86217d93308dbfb3ffaf6e6fb74d8/libsuperuser-1.0.0.201811281328/res" />
     </CLASSES>
-    <JAVADOC />
-    <SOURCES />
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/eu.chainfire/libsuperuser/1.0.0.201811281328/a72273aa6811ab43ea76c8c2e21518a771ede212/libsuperuser-1.0.0.201811281328-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/eu.chainfire/libsuperuser/1.0.0.201811281328/2f4aa6fc397410c9d7be19668cdd9cabe939dece/libsuperuser-1.0.0.201811281328-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
