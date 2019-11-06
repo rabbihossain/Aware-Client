@@ -82,7 +82,7 @@ public class SendDataService extends IntentService {
         Log.d(TAG, "In onHandleIntent");
         TinyDB tinydb = new TinyDB(getApplicationContext());
 
-        List<Applog> totalLog = Select.from(Applog.class).where(Condition.prop("synced").eq(0)).limit("1000").list();
+        List<Applog> totalLog = Select.from(Applog.class).where(Condition.prop("synced").eq(0)).limit("10000").list();
 
 
         boolean run = true;

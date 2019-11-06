@@ -69,7 +69,6 @@ public class logDataActivity extends AppCompatActivity {
         }
         else {
             Log.d("logDataActivity.class", "SendDataService not started, do it now.");
-            Toast.makeText(this, "starting SendDataService now. Please wait...", Toast.LENGTH_LONG).show();
 
             Intent sendIntent = new Intent(this, SendDataService.class);
             sendIntent.putExtra(this.getString(R.string.startSendDataServiceClicked_key), false);
@@ -84,8 +83,8 @@ public class logDataActivity extends AppCompatActivity {
 
         }
         else {
-            Toast.makeText(this, "starting deleteSyncedDataService now. Please wait...", Toast.LENGTH_LONG).show();
             Log.d("logDataActivity.class", "Starting deleteSyncedDataService.java");
+            Toast.makeText(this, "starting deleteSyncedDataService now. Please wait...", Toast.LENGTH_LONG).show();
             Intent deleteIntent = new Intent(this, deleteSyncedDataService.class);
             startService(deleteIntent);
         }
