@@ -12,6 +12,8 @@ public class Applog extends SugarRecord <Applog> {
     Date timestamp;
     String gps;
     String synced;
+    String dateval;
+    String timeval;
 
 
     public Applog() {
@@ -24,6 +26,8 @@ public class Applog extends SugarRecord <Applog> {
         this.timestamp = timestamp;
         this.gps = gps;
         this.synced = synced;
+        this.dateval = timestamp.getDate()+"/"+(timestamp.getMonth() + 1)+"/"+(1900 + timestamp.getYear());
+        this.timeval = timestamp.getHours()+":"+timestamp.getMinutes();
     }
 
 }

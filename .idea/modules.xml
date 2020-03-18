@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Aware-Client.iml" filepath="$PROJECT_DIR$/Aware-Client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Aware-Client.iml" filepath="$PROJECT_DIR$/Aware-Client.iml" group="Aware-Client" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Aware-Client/app" />
     </modules>
   </component>
 </project>

@@ -19,8 +19,10 @@ public class PermissionMaybe extends Worker {
 
     @Override
     public Result doWork() {
-        // Do the work here--in this case, upload the images.
+        // Do the work here. Like running the deny command;
         String commandToRun = getInputData().getString("command");
+
+
 
         Shell.SU.run(new String[] {
             commandToRun

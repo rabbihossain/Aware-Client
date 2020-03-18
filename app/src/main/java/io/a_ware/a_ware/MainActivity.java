@@ -3,6 +3,8 @@ package io.a_ware.a_ware;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -90,6 +92,20 @@ public class MainActivity extends AppCompatActivity {
 
         tinydb.putListString("AwareAppList", appNames);
         Log.d("AppList", tinydb.getListString("AwareAppList").toString());
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Aware";
+            String description = "Aware default notification channel";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("aware", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
 
         //TODO add delay between starts so toas wont overlapp and to reduce computing power needed
         requestPermissions();

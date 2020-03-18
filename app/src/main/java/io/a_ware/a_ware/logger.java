@@ -2,27 +2,40 @@ package io.a_ware.a_ware;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.orm.query.Condition;
+import com.orm.query.Select;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -31,10 +44,18 @@ public class logger extends AppCompatActivity {
 
     final ArrayList<String> itemname =new ArrayList<String>();
     final ArrayList<String> itemdetail = new ArrayList<String>();
+    final ArrayList<Integer> itemcount = new ArrayList<Integer>();
+    final ArrayList<Integer> itemcountsystem = new ArrayList<Integer>();
+
     final Activity activity = this;
     final String [] loggingKeywords = new String[] {"start","camera","location","gps","bluetooth","kill", "sms", "contact", "call", "wifi", "data"};
     final String [] loggingKeywordsExplained = new String[] {"App Launched", "Camera", "Geolocation", "Geolocation", "Bluetooth", "App Closed", "SMS", "Contacts", "Phone Call", "Wifi Access", "Data Service"};
     private String TAG = "logger.java";
+
+    DatePickerDialog dateSelector;
+    TextView dateText;
+    ImageButton dateSelectButton;
+    CustomArrayListAdapterForPermGraph adapter;
 
     private class Startup extends AsyncTask<Void, Void, Void> {
         private ProgressDialog dialog = null;
@@ -52,6 +73,28 @@ public class logger extends AppCompatActivity {
         public Startup setContext(Context context) {
             this.context = context;
             return this;
+        }
+
+        final PackageManager pm = getApplicationContext().getPackageManager();
+        ApplicationInfo ai;
+
+        private void listModifier(String appPackageName, String permName, String date){
+            long permcount = Select.from(Applog.class)
+                    .where(
+                            Condition.prop("packagen").eq(appPackageName),
+                            Condition.prop("permission").eq(permName),
+                            Condition.prop("dateval").eq(date)
+                    )
+                    .count();
+            long permcountsystem = Select.from(Applog.class)
+                    .where(
+                            Condition.prop("permission").eq(permName),
+                            Condition.prop("dateval").eq(date)
+                    )
+                    .count();
+
+            itemcount.add((int) permcount);
+            itemcountsystem.add((int) permcountsystem);
         }
 
         @Override
@@ -88,6 +131,65 @@ public class logger extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             dialog.dismiss();
 
+            dateText = findViewById(R.id.dateSelect);
+            dateText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Calendar cldr = Calendar.getInstance();
+                    int day = cldr.get(Calendar.DAY_OF_MONTH);
+                    int month = cldr.get(Calendar.MONTH);
+                    int year = cldr.get(Calendar.YEAR);
+                    // date picker dialog
+                    dateSelector = new DatePickerDialog(activity,
+                            new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                    dateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+
+                                    itemcount.clear();
+                                    itemcountsystem.clear();
+                                    for(int i=0; i < itemname.size(); i++){
+                                        String permName = itemname.get(i);
+                                        listModifier(appPackageName, permName, dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                    }
+                                    adapter.setData(itemname, itemdetail, itemcount, itemcountsystem);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }, year, month, day);
+                    dateSelector.show();
+                }
+            });
+
+            dateSelectButton = findViewById(R.id.dateSelectButton);
+            dateSelectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Calendar cldr = Calendar.getInstance();
+                    int day = cldr.get(Calendar.DAY_OF_MONTH);
+                    int month = cldr.get(Calendar.MONTH);
+                    int year = cldr.get(Calendar.YEAR);
+                    // date picker dialog
+                    dateSelector = new DatePickerDialog(activity,
+                            new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                    dateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                    itemcount.clear();
+                                    itemcountsystem.clear();
+                                    for(int i=0; i < itemname.size(); i++){
+                                        String permName = itemname.get(i);
+                                        listModifier(appPackageName, permName, dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                    }
+                                    adapter.setData(itemname, itemdetail, itemcount, itemcountsystem);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }, year, month, day);
+                    dateSelector.show();
+
+
+                }
+            });
+
             // output
             StringBuilder sb = new StringBuilder();
             if (suResult != null) {
@@ -104,12 +206,33 @@ public class logger extends AppCompatActivity {
 
                         itemdetail.add("Last Usage: " + String.valueOf(DateString));
 
+                        final Calendar cldr = Calendar.getInstance();
+                        int day = cldr.get(Calendar.DAY_OF_MONTH);
+                        int month = cldr.get(Calendar.MONTH);
+                        int year = cldr.get(Calendar.YEAR);
+
+                        long permcount = Select.from(Applog.class)
+                                .where(
+                                        Condition.prop("packagen").eq(appPackageName),
+                                        Condition.prop("permission").eq(line.substring(0, line.indexOf(':'))),
+                                        Condition.prop("dateval").eq(day+"/"+(month + 1)+"/"+year)
+                                )
+                                .count();
+                        long permcountsystem = Select.from(Applog.class)
+                                .where(
+                                        Condition.prop("permission").eq(line.substring(0, line.indexOf(':'))),
+                                        Condition.prop("dateval").eq(day+"/"+(month + 1)+"/"+year)
+                                )
+                                .count();
+
+                        itemcount.add((int) permcount);
+                        itemcountsystem.add((int) permcountsystem);
                     }
 
                 }
             }
             ListView listView = (ListView) findViewById(R.id.loggerList);
-            CustomArrayListAdapterForPerm adapter=new CustomArrayListAdapterForPerm(activity, itemname, itemdetail);
+            adapter = new CustomArrayListAdapterForPermGraph(activity, itemname, itemdetail, itemcount, itemcountsystem);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -117,7 +240,14 @@ public class logger extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // TODO Auto-generated method stub
                     final String Selecteditem = itemname.get(+position);
-//
+
+                    try {
+                        ai = pm.getApplicationInfo( appPackageName, 0);
+                    } catch (final PackageManager.NameNotFoundException e) {
+                        ai = null;
+                    }
+                    final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
+
 
                     // setup the alert builder
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -153,6 +283,9 @@ public class logger extends AppCompatActivity {
                                         .putString("command", commandString)
                                         .build();
 
+                                Data notifyContent = new Data.Builder()
+                                        .putString("notifycontent", Selecteditem+" permission will set to be denied for "+applicationName+" soon")
+                                        .build();
 
                                 OneTimeWorkRequest runCommand =
                                         new OneTimeWorkRequest.Builder(PermissionMaybe.class)
@@ -161,6 +294,14 @@ public class logger extends AppCompatActivity {
                                                 .build();
 
                                 WorkManager.getInstance(context).enqueue(runCommand);
+
+                                OneTimeWorkRequest runNotification =
+                                        new OneTimeWorkRequest.Builder(NotifyMaybe.class)
+                                                .setInputData(notifyContent)
+                                                .setInitialDelay(1410, TimeUnit.MINUTES)
+                                                .build();
+
+                                WorkManager.getInstance(context).enqueue(runNotification);
                             }
 
                         }
